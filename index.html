@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+
+        <!-- MAPS API KEY: AIzaSyARkS-dsh-7IirtcQg3oSZEHudV6Uw9Iic
+        Serwer WebSocket: ws://szkolenia.design.net.pl:8010 -->
+
+    <div id="map"></div>
+    <script>
+    var map;
+    let data;
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -34.397, lng: 150.644},
+          zoom: 12,
+          keyboardShortcuts: false
+        });
+        marker = new google.maps.Marker({
+            position: {lat: -34.397, lng: 150.644} ,
+            map: map,
+            icon: 'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png',
+            animation: google.maps.Animation.DROP
+        });
+        getLocalization();
+        addKeyboardEvent();
+        
+      }
+
+      function getLocalization() {
+          navigator.geolocation.getCurrentPosition(geoOk, geoFail);
+      }
+
+      function geoOk(data){
+          let coords = {lat: data.coords.latitude, lng: data.coords.longitude}
+          map.setCenter(coords);
+          marker.setPosition(coords);
+      }
+
+      function geoFail(err){
+          console.log(err);
+      }
+
+      function addKeyboardEvent(){
+          window.addEventListener('keydown', moveMarker);
+      }
+
+      function moveMarker(key){
+          let lat =  marker.getPosition().lat();
+          let lng =  marker.getPosition().lng();
+
+          switch(key.code){
+            case 'ArrowUp':
+                lat += 0.01;
+                break;
+            case 'ArrowDown':
+                lat -= 0.01;
+                break;
+            case 'ArrowRight':
+                lng += 0.01;
+                break;
+            case 'ArrowLeft':
+                lng -= 0.01;
+                break;
+            default:
+                break;
+          }
+          console.log("lat:" + lat);
+          console.log("lng" + lng);
+
+          marker.setPosition({lat,lng});
+          if(map.center.lat() + 30 < lat)
+            map.setCenter({lat,lng});
+          
+          
+      }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARkS-dsh-7IirtcQg3oSZEHudV6Uw9Iic&callback=initMap&callback(initMap)"
+    async defer></script>
+  </body>
+</html>
