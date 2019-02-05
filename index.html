@@ -4,30 +4,24 @@
     <title>Simple Map</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100italic,300,300italic,regular,italic,500,500italic,700,700italic,900,900italic" rel="stylesheet" />
   </head>
   <body>
 
         <!-- MAPS API KEY: AIzaSyARkS-dsh-7IirtcQg3oSZEHudV6Uw9Iic
         Serwer WebSocket: ws://szkolenia.design.net.pl:8010 -->
 
+    <div class="container">
     <div id="map"></div>
-    <script src = "main.js">
-    
+    <div class="interface">
+      <h2>Twój kod to</h2>
+      <h2>Wybierz swój awatar</h2>
+      <input type="file"  id="file" />
+    </div>
+    </div>
 
-    </script>
+    <script src = "main.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARkS-dsh-7IirtcQg3oSZEHudV6Uw9Iic&callback=initMap&callback(initMap)"
     async defer></script>
   </body>
