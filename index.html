@@ -13,12 +13,18 @@
         Serwer WebSocket: ws://szkolenia.design.net.pl:8010 -->
 
     <div class="container">
-    <div id="map"></div>
-    <div class="interface">
-      <h2>Twój kod to</h2>
-      <h2>Wybierz swój awatar</h2>
-      <input type="file"  id="file" />
-    </div>
+      <div class="mapsection">
+        <div id="map"></div>
+        <div class="interface">
+        </div>
+      </div>
+      <div class="chatsection">
+        <div class="log" id = "log"></div>
+        <div class="sendControls">
+          <input type="text" name="" id="text" placeholder="Your message here">
+          <button>Send</button>
+        </div>
+      </div>
     </div>
 
     <script src = "main.js"></script>

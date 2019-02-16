@@ -1,6 +1,11 @@
 var map;
 let data;
 let img = 0;
+let url = 'ws://localhost:8080';
+let sock = new WebSocket(url);
+let log = document.getElementById('log');
+
+let sendMessage;
 // Funkcjonalności:
 // 1. Podpięcie się do API Google Maps, DONE
 // 2. Wyświetlenie mapy, zlokalizowane środka mapy w geolokalizacji użytkownika (pobieranie geolokalizacji z przeglądarki, reagowanie na sytuacje awaryjne (np. użytkownik nie udostępnij lokalizacji) DONE
@@ -9,25 +14,25 @@ let img = 0;
 // 5. Spięcie własnego markera z udostępnionym (dane poniżej) serwerem Websocket w celu utworzenia gry w gonienie się po mapie (można przetestować z np. dwóch przeglądarek). 
 // 6. Opracowanie protokołu komunikacji filtrującego niechciane komunikaty (np. od innej aplikacji korzystającej z tego samego serwera) - np. prywatne mapy.
 // 7. Widoczne okno czatu (możliwość rozmowy z innymi osobami korzystającymi z aplikacji)
-document.getElementById('file').onchange = function (evt) {
-    var tgt = evt.target || window.event.srcElement,
-        files = tgt.files;
+// document.getElementById('file').onchange = function (evt) {
+//     var tgt = evt.target || window.event.srcElement,
+//         files = tgt.files;
 
-    // FileReader support
-    if (FileReader && files && files.length) {
-        var fr = new FileReader();
-        fr.onload = function () {
-            document.getElementById(img).src = fr.result;
-        }
-        fr.readAsDataURL(files[0]);
-    }
+//     // FileReader support
+//     if (FileReader && files && files.length) {
+//         var fr = new FileReader();
+//         fr.onload = function () {
+//             document.getElementById(img).src = fr.result;
+//         }
+//         fr.readAsDataURL(files[0]);
+//     }
 
-    // Not supported
-    else {
-        // fallback -- perhaps submit the input to an iframe and temporarily store
-        // them on the server until the user's session ends.
-    }
-}
+//     // Not supported
+//     else {
+//         // fallback -- perhaps submit the input to an iframe and temporarily store
+//         // them on the server until the user's session ends.
+//     }
+// }
 
 
 function initMap() {
@@ -61,6 +66,7 @@ function getLocalization() {
 }
 
 function geoOk(data) {
+
     let coords = { lat: data.coords.latitude, lng: data.coords.longitude }
     map.setCenter(coords);
     marker.setPosition(coords);
@@ -96,13 +102,28 @@ function moveMarker(key) {
         default:
             break;
     }
-    console.log("lat:" + lat);
-    console.log("lng" + lng);
-    console.log("maplng" + map.center.lng());
-    
-
+    //console.log("lat:" + lat);
+    //console.log("lng" + lng);
+   // console.log("maplng" + map.center.lng());
     marker.setPosition({ lat, lng });
-   
-
-
 }
+
+
+//websocket part
+
+sock.onopen = function(e){
+    console.log('Socket connected');
+};
+
+
+sock.onmessage = function(event){
+    console.log(event);
+    log.innerHTML += event.data+"<br>";
+};
+
+
+document.querySelector('button').onclick = function(){
+    var text = document.getElementById('text').value;
+    sock.send(text);
+    log.innerHTML += "You: " + text + "<br>";
+};
