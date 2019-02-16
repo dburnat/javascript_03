@@ -111,19 +111,29 @@ function moveMarker(key) {
 
 //websocket part
 
+let name = prompt('What is your name?'); //asking user for a name
+
 sock.onopen = function(e){
-    console.log('Socket connected');
+    sock.send(JSON.stringify({
+        type: "name",           //what do we want to send
+        data: name              //value of what we send
+    }));
 };
 
 
 sock.onmessage = function(event){
     console.log(event);
-    log.innerHTML += event.data+"<br>";
+    let json = JSON.parse(event.data);
+
+    log.innerHTML += json.name + ": " + json.data +"<br>";
 };
 
 
 document.querySelector('button').onclick = function(){
     var text = document.getElementById('text').value;
-    sock.send(text);
+    sock.send(JSON.stringify({
+        type: "message",
+        data: text
+    }));
     log.innerHTML += "You: " + text + "<br>";
 };

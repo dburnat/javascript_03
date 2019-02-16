@@ -1,14 +1,24 @@
 const WebSocket = require('ws');
 
 const wss = new WebSocket.Server({ port: 8080 });
-
 wss.on('connection', function (ws) {
   ws.on('message', function(message) {
-    console.log('received: %s', message);
 
+    message = JSON.parse(message);
+
+    if(message.type == "name"){
+        ws.personName =  message.data;
+        return;
+    }
+    console.log('received: %s', message);
+    
     wss.clients.forEach(function e(client){
       if(client != ws)
-        client.send(message);
+        client.send(JSON.stringify({
+          name: client.personName,
+          data: message.data
+        }
+        ));
     });
   });
 
