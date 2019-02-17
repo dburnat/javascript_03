@@ -10,12 +10,12 @@ wss.on('connection', function (ws) {
         ws.personName =  message.data;
         return;
     }
-    console.log('received: %s', message);
+    console.log('received: %s', message.data);
     
     wss.clients.forEach(function e(client){
-      if(client != ws)
+      if(client != ws )
         client.send(JSON.stringify({
-          name: client.personName,
+          name: ws.personName,
           data: message.data
         }
         ));
